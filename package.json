@@ -1,0 +1,22 @@
+{
+  "name": "image_scrounger",
+  "version": "1.0.0",
+  "description": "Extracts images from web pages",
+  "main": "Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jneg/ImageScrounger.git"
+  },
+  "author": "Javon Negahban",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jneg/ImageScrounger/issues"
+  },
+  "homepage": "https://github.com/jneg/ImageScrounger#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
