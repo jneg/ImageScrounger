@@ -1,18 +1,13 @@
-var socket = io('http://localhost:3000')
+var Socket = io('http://localhost:3000')
+var EE = new EventEmitter()
 
-Vue.component('ImageScroungerURIBar', {
+Vue.component('ImageScroungerUri', {
   'template':
-   '<div class="ui basic segment">\
-      <div class="ui center aligned grid">\
-        <div class="ten wide column">\
-          <div class="ui fluid action input">\
-            <input v-model="inputUri" placeholder="URI">\
-            <button @click="scroungeUri" class="ui teal button">Scrounge</button>\
-          </div>\
-        </div>\
-      </div>\
+    '<div class="ui fluid left icon input">\
+      <input v-model="inputUri" placeholder="Uri">\
+      <i class="browser icon"></i>\
+      <button id="scrounge" @click="scroungeUri" class="ui teal basic button" style="margin-left:10px;">Scrounge</button>\
     </div>',
-  'props': ['uriLength'],
   'data': function () {
     return {
       'inputUri': ''
@@ -20,9 +15,47 @@ Vue.component('ImageScroungerURIBar', {
   },
   'methods': {
     'scroungeUri': function () {
-      socket.emit('scroungeUri', this.inputUri)
+      $('button#scrounge').addClass('loading')
+      Socket.emit('scroungeUri', this.inputUri)
+    }
+  },
+  'mounted': function () {
+    Socket.on('imageUris', function () {
+      $('button#scrounge').removeClass('loading')
+    })
+  }
+})
+
+Vue.component('ImageScroungerControlSize', {
+  'template':
+   '<div class="ui left icon input">\
+      <input v-model="maxImageSize" placeholder="Px" size="4">\
+      <i class="expand icon"></i>\
+    </div>',
+  'data': function () {
+    return {
+      'maxImageSize': '200'
+    }
+  },
+  'watch': {
+    'maxImageSize': function (v) {
+      EE.emit('maxSize', this.maxImageSize)
     }
   }
+})
+
+Vue.component('ImageScroungerControlBar', {
+  'template':
+   '<div class="ui basic padded segment">\
+      <div class="ui center aligned grid">\
+        <div class="eight wide column">\
+          <ImageScroungerUri></ImageScroungerUri>\
+        </div>\
+        <div class="four wide column">\
+          <ImageScroungerControlSize></ImageScroungerControlSize>\
+        </div>\
+      </div>\
+    </div>'
 })
 
 Vue.component('ImageScroungerImageGrid', {
@@ -34,7 +67,7 @@ Vue.component('ImageScroungerImageGrid', {
         </a>\
       </div>\
     </div>',
-  'props': ['uris', 'imageSize'],
+  'props': ['uris', 'maxImageSize'],
   'computed': {
     'imgContainerStyle': function () {
       return {
@@ -44,8 +77,8 @@ Vue.component('ImageScroungerImageGrid', {
     },
     'imgStyle': function () {
       return {
-        maxHeight: this.imageSize + 'px',
-        maxWidth: this.imageSize + 'px'
+        maxHeight: this.maxImageSize + 'px',
+        maxWidth: this.maxImageSize + 'px'
       }
     }
   }
@@ -54,23 +87,21 @@ Vue.component('ImageScroungerImageGrid', {
 Vue.component('ImageScroungerController', {
   'template':
    '<main>\
-     <ImageScroungerURIBar></ImageScroungerURIBar>\
-     <ImageScroungerImageGrid :uris="uris" :imageSize="imageSize"></ImageScroungerImageGrid>\
+     <ImageScroungerControlBar></ImageScroungerControlBar>\
+     <ImageScroungerImageGrid :uris="uris" :maxImageSize="maxImageSize"></ImageScroungerImageGrid>\
     </main>',
   'data': function () {
     return {
-      'uris': ['https://static.pexels.com/photos/56875/tree-dawn-nature-bucovina-56875.jpeg',
-               'https://cdn.pixabay.com/photo/2014/12/22/00/07/tree-576847_1280.png',
-               'http://weknowyourdreams.com/images/tree/tree-01.jpg',
-               'https://lh3.googleusercontent.com/-XOLl50tjLug/V05rl_eU98I/AAAAAAABNtQ/3WhFFDlmFCk/orr-park-tree-carvings-37.jpg?imgmax=1600',
-               'https://treesatlanta.org/wp-content/files_mf/cache/th_515b92c7a4ae9e77c6b55fb35c882ce8_homesliderimage5.jpg',
-               'http://treegroup.info/tree-april-19.gif'],
-      'imageSize': 250
+      'uris': [],
+      'maxImageSize': '200'
     }
   },
   'mounted': function () {
-    socket.on('imageUris', function (uris) {
+    Socket.on('imageUris', function (uris) {
       this.uris = uris
+    }.bind(this))
+    EE.on('maxSize', function (size) {
+      this.maxImageSize = size;
     }.bind(this))
   }
 })

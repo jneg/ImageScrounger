@@ -8,20 +8,19 @@ const cheerio = require('cheerio')
 const port = 3000
 
 Io.on('connection', function (socket) {
-  console.log('[' + socket.id + ']' + ' Connected')
   socket.on('scroungeUri', function (uri) {
-    console.log('[' + socket.id + ']' + ' Received scroungeUri \"' + uri + "\"")
     var imageUris = []
     request(uri, function (error, response, body) {
       $ = cheerio.load(body)
       $('body').find('img').each(function (i, v) {
-        var imageUri = $(v).attr('src')
-        if (!new RegExp('^(?:[a-z]+:)?//', 'i').test(imageUri)) {
-          imageUri = uri + '/' + imageUri
+        if ($(v).prop('src')) {
+          var imageUri = $(v).attr('src')
+          if (!new RegExp('^(?:[a-z]+:)?//', 'i').test(imageUri)) {
+            imageUri = uri + '/' + imageUri
+          }
+          imageUris.push(imageUri)
         }
-        imageUris.push(imageUri)
       })
-      console.log(imageUris)
       socket.emit('imageUris', imageUris)
     })
   })
