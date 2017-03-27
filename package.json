@@ -1,17 +1,18 @@
 {
   "name": "image_scrounger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Extracts images from web pages",
   "main": "Server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node Server.js",
+    "postinstall": "webpack"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jneg/ImageScrounger.git"
   },
   "author": "Javon Negahban",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jneg/ImageScrounger/issues"
   },
@@ -19,7 +20,21 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "express": "^4.15.2",
+    "pug": "^2.0.0-beta11",
     "request": "^2.81.0",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue": "^2.2.6"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "css-loader": "^0.27.3",
+    "vue-loader": "^11.3.3",
+    "vue-template-compiler": "^2.2.6",
+    "webpack": "^2.3.2"
   }
 }

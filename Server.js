@@ -8,7 +8,7 @@ const cheerio = require('cheerio')
 const port = 3000
 
 Io.on('connection', function (socket) {
-  socket.on('scroungeUri', function (uri) {
+  socket.on('ScroungeUri', function (uri) {
     var imageUris = []
     request(uri, function (error, response, body) {
       $ = cheerio.load(body)
@@ -26,9 +26,9 @@ Io.on('connection', function (socket) {
   })
 })
 
-Server.use('/Vue', Express.static('Vue'))
+Server.use('/Js', Express.static('Js'))
 Server.get('/', (req, res) => {
-  res.sendFile(__dirname + '/Html/ImageScrounger.html')
+  res.sendFile(__dirname + '/ImageScrounger.html')
 })
 
 HttpServer.listen(port, () => console.log('ImageScrounger listening on port ' + port))
