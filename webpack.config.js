@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
-  entry: './Vue/ImageScrounger.js',
+  entry: './ImageScrounger.js',
   output: {
     path: path.resolve(__dirname, './Js'),
     filename: 'App.js'

@@ -1,8 +1,8 @@
 <template lang="pug">
 div(class="ui basic segment")
-  div(v-for="uri in uris" :style="imgContainerStyle")
+  div(v-for="uri in uris" v-bind:style="imgContainerStyle")
     a(:href="uri" target="_blank")
-      img(:src="uri" :style="imgStyle")
+      img(:src="uri" v-bind:style="imgStyle")
 </template>
 
 <script>
