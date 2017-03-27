@@ -21,7 +21,7 @@ Io.on('connection', function (socket) {
           imageUris.push(imageUri)
         }
       })
-      socket.emit('imageUris', imageUris)
+      socket.emit('ImageUris', imageUris)
     })
   })
 })

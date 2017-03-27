@@ -1,28 +1,34 @@
 <template lang="pug">
 div(class="ui fluid left icon input")
-  input(v-model="inputUri" placeholder="Uri")
+  input(v-model="uri" placeholder="Uri")
   i(class="browser icon")
-  button(@click="scroungeUri" class="ui teal basic button") Scrounge
+  button(@click="scroungeUri" id="scroungeButton" class="ui teal basic button") Scrounge
 </template>
 
 <script>
-const Socket = require('socket.io-client')('http://localhost:3000')
+import Store from '../Store/Store.js'
 
 export default {
-  data() {
-    return {
-      inputUri: ''
+  computed: {
+    uri: {
+      get() { return Store.getters.uri },
+      set(value) { Store.commit('setUri', value) }
     }
   },
   methods: {
     scroungeUri() {
-      Socket.emit('ScroungeUri', this.inputUri)
+      this.$socket.emit('ScroungeUri', Store.getters.uri)
+    }
+  },
+  mounted() {
+    this.$options.sockets.ImageUris = (imageUris) => {
+      Store.commit('setImageUris', imageUris)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.basic.button
+#scroungeButton
   margin-left: 10px
 </style>

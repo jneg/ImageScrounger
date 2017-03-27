@@ -5,10 +5,13 @@ div(class="ui left icon input")
 </template>
 
 <script>
+import Store from '../Store/Store.js'
+
 export default {
-  data() {
-    return {
-      maxImageSize: '300'
+  computed: {
+    maxImageSize: {
+      get() { return Store.getters.maxImageSize },
+      set(value) { Store.commit('setMaxImageSize', value) }
     }
   }
 }
