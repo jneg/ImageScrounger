@@ -26,7 +26,7 @@ Io.on('connection', function (socket) {
   })
 })
 
-Server.use('/Js', Express.static('Js'))
+Server.use('/Bundles', Express.static('Bundles'))
 Server.get('/', (req, res) => {
   res.sendFile(__dirname + '/ImageScrounger.html')
 })

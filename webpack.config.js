@@ -1,11 +1,12 @@
 const webpack = require('webpack')
 const path = require('path')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: './ImageScrounger.js',
   output: {
-    path: path.resolve(__dirname, './Js'),
-    filename: 'App.js'
+    path: path.resolve(__dirname, './Bundles'),
+    filename: 'Bundle.js'
   },
   module: {
     rules: [
@@ -23,10 +24,19 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('css-loader')
+      },
+      {
+        test: /\.styl$/,
+        loader: ExtractTextPlugin.extract('css-loader!stylus-loader')
       }
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new ExtractTextPlugin("Bundle.css")
   ]
 }
