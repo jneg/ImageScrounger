@@ -20,5 +20,6 @@ Vue.component('ImageGrid', ImageGrid)
 
 new Vue({
   el: '#Mount',
+  Store,
   render: h => h(ImageScrounger)
 })
